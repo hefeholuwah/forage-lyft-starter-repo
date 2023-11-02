@@ -1,10 +1,16 @@
-from datetime import datetime
-
 from engine.sternman_engine import SternmanEngine
 
 
+from datetime import datetime
+from tire import Tire  # Import the Tire class
+
 class Palindrome(SternmanEngine):
+    def __init__(self, last_service_date, warning_light_is_on, tire_info):
+        super().__init__(last_service_date, warning_light_is_on)
+        self.tire = Tire(tire_info["type"], tire_info["wear"])  # Initialize the Tire instance
+
     def needs_service(self):
-        service_threshold_date = self.last_service_date.replace(year=self.last_service_date.year + 4)
-        return service_threshold_date < datetime.today().date() or self.engine_should_be_serviced()
+        # Check if either the engine or the tire needs service
+        return super().needs_service() or self.tire.needs_service()
+
 

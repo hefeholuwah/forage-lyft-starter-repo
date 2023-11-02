@@ -1,12 +1,14 @@
-from datetime import datetime
-
 from engine.willoughby_engine import WilloughbyEngine
-
+from datetime import datetime
+from tire import Tire  # Import the Tire class
 
 class Glissade(WilloughbyEngine):
+    def __init__(self, last_service_date, current_mileage, last_service_mileage, tire_info):
+        super().__init__(last_service_date, current_mileage, last_service_mileage)
+        self.tire = Tire(tire_info["type"], tire_info["wear"])  # Initialize the Tire instance
+
     def needs_service(self):
-        service_threshold_date = self.last_service_date.replace(year=self.last_service_date.year + 2)
-        if service_threshold_date < datetime.today().date() or self.engine_should_be_serviced():
-            return True
-        else:
-            return False
+        # Check if either the engine or the tire needs service
+        return super().needs_service() or self.tire.needs_service()
+
+
